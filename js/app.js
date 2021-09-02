@@ -2,6 +2,7 @@ const searchField = document.getElementById('search-feild');
 const errorField = document.getElementById('error-msg');
 const bookContainer = document.getElementById('book-container');
 const searchResultDiv = document.getElementById('search-result');
+const spinner = document.getElementById('spinner');
 
 
 // getdata
@@ -9,7 +10,9 @@ const getData = () => {
     const search = searchField.value;
     searchField.value = '';
     errorField.innerText = '';
-    console.log(search);
+    searchResultDiv.textContent = '';
+    bookContainer.textContent = '';
+    spinner.classList.remove('d-none');
     fetch(`https://openlibrary.org/search.json?q=${search}`)
         .then(res => res.json())
         .then(data => displayData(data.docs))
@@ -28,8 +31,6 @@ const errorHandle = bookArr => {
 // display data
 const displayData = bookArr => {
     errorHandle(bookArr);
-    bookContainer.textContent = '';
-    searchResultDiv.textContent = '';
     // search result
     const div = document.createElement('div');
     div.classList.add('col');
@@ -39,9 +40,9 @@ const displayData = bookArr => {
         </div>
     `;
     searchResultDiv.appendChild(div);
+    spinner.classList.add('d-none');
     // display book content
     bookArr.forEach(book => {
-        console.log(book)
         const div = document.createElement('div');
         div.classList.add('col');
         div.innerHTML = `
